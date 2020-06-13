@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Gott</string>
+    <string name="check">CHECK INTERNET</string>
+    <string name="check_bt">CHECK BLUETOOTH</string>
+    <string name="ble">CHECK BLUETOOTH</string>
+    <string name="start">START</string>
+    <string name="off">TURN OFF</string>
+    <string name="on">TURN ON</string>
+    <string name="error_txt">Error loading data from Google Books API</string>
+</resources>
