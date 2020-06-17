@@ -7,4 +7,9 @@
     <string name="off">TURN OFF</string>
     <string name="on">TURN ON</string>
     <string name="error_txt">Error loading data from Google Books API</string>
+    <string name="text_title">TEXT TITLE</string>
+    <string name="subtitle">nothing big</string>
+    <string name="publishedDate">Published Date</string>
+    <string name="publisher">Publisher</string>
+    <string name="search">search</string>
 </resources>

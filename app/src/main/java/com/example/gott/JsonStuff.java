@@ -1,14 +1,23 @@
 package com.example.gott;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuItemCompat;
+import androidx.lifecycle.Lifecycle;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TabHost;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -16,9 +25,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class JsonStuff extends Activity {
+public class JsonStuff extends AppCompatActivity implements SearchView.OnQueryTextListener{
 
     private ProgressBar mLoadingProgress;
+
+    private RecyclerView rv_books;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +37,13 @@ public class JsonStuff extends Activity {
         setContentView(R.layout.activity_json_stuff);
 
         mLoadingProgress = findViewById(R.id.pb_loading);
+
+//        RECYCLER VIEW AND ITS LAYOUT
+        rv_books = findViewById(R.id.rv_books);
+        LinearLayoutManager books_layout = new LinearLayoutManager(this,
+                LinearLayoutManager.VERTICAL, false);
+
+        rv_books.setLayoutManager(books_layout);
 
         try {
             URL bookUrl = ApiUtil.buildUrl("Cooking");
@@ -35,13 +53,41 @@ public class JsonStuff extends Activity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.book_list_menu, menu);
+        final MenuItem searchitem = findViewById(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchitem);
+        searchView.setOnQueryTextListener(this);
+
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+
+        try {
+            URL bookURL = ApiUtil.buildUrl(query);
+            new BookQueryTask().execute(bookURL);
+        }catch (Exception e){
+            Log.d("error", e.getMessage());
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
+    }
+
     public class BookQueryTask extends AsyncTask<URL, Void, String>{
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            TextView error_msg = (TextView) findViewById(R.id.error_txt);
+            TextView error_msg = findViewById(R.id.error_txt);
 
             error_msg.setVisibility(View.INVISIBLE);
             mLoadingProgress.setVisibility(View.VISIBLE);
@@ -56,36 +102,29 @@ public class JsonStuff extends Activity {
                 try{
                     result = ApiUtil.getJson(search);
                 }catch (IOException e){
-                    Log.d("Error", Objects.requireNonNull(e.getMessage()));
+                    Log.d("Error", e.getMessage());
                 }
             return result;
         }
 
         @Override
         protected void onPostExecute(String result) {
-            TextView txt = findViewById(R.id.display);
-            TextView error_msg = (TextView) findViewById(R.id.error_txt);
+            TextView error_msg = findViewById(R.id.error_txt);
 
             mLoadingProgress.setVisibility(View.INVISIBLE);
 
             if (result == null){
-                txt.setVisibility(View.INVISIBLE);
+                rv_books.setVisibility(View.INVISIBLE);
                 error_msg.setVisibility(View.VISIBLE);
             }else{
-                txt.setVisibility(View.VISIBLE);
+                rv_books.setVisibility(View.VISIBLE);
                 error_msg.setVisibility(View.INVISIBLE);
             }
 
             ArrayList<Book> books = ApiUtil.getBooksFromJson(result);
-            String resultString = "";
 
-            for (Book book : books){
-                resultString = resultString + book.title + "\n"
-                        + book.publisher +"\n"
-                + book.published_date + "\n\n\n";
-            }
-
-            txt.setText(resultString);
+            BooksAdapter adapter = new BooksAdapter(books);
+            rv_books.setAdapter(adapter);
         }
     }
 }

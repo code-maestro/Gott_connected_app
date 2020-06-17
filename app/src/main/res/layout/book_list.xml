@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="100">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="0dp"
+        android:layout_weight="15"
+        android:layout_height="wrap_content"
+        android:src="@drawable/book_open"
+        android:padding="8dp"/>
+
+    <LinearLayout
+        android:layout_weight="85"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/title"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/title_size"
+            android:text="@string/text_title"/>
+
+        <TextView
+            android:id="@+id/subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:text="@string/subtitle"
+            android:textSize="@dimen/subtitle_size"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="100">
+
+            <TextView
+                android:id="@+id/publisher"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="70"
+                android:textSize="@dimen/pub_txt_size"
+                android:text="@string/publisher"/>
+
+            <TextView
+                android:id="@+id/publishedDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="30"
+                android:textAlignment="textEnd"
+                android:paddingEnd="@dimen/pudDate_padding"
+                android:paddingRight="@dimen/pudDate_padding"
+                android:textSize="@dimen/pub_txt_size"
+                android:text="@string/publishedDate"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    </LinearLayout>

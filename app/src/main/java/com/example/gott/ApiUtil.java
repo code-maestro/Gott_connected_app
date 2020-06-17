@@ -89,10 +89,10 @@ public class ApiUtil {
             JSONArray arrayBooks = jsonBooks.getJSONArray(ITEMS);
 
             // retrieving the number of books in the json file retrieved from WEB SERVICE API URL
-            int numberofBooks = arrayBooks.length();
+            int numberOfBooks = arrayBooks.length();
 
             // for loop to iterate through the books retrieved from webservice
-            for (int i = 0; i<numberofBooks; i++){
+            for (int i = 0; i<numberOfBooks; i++){
                 JSONObject bookJSON = arrayBooks.getJSONObject(i);
                 JSONObject volumeInfoJSON = bookJSON.getJSONObject(VOLUMEINFO);
 
@@ -110,9 +110,9 @@ public class ApiUtil {
                 Book buch = new Book(
                         bookJSON.getString(ID),
                         volumeInfoJSON.getString(TITLE),
-                        (volumeInfoJSON.isNull(SUBTITLE)?"" :volumeInfoJSON.getString(SUBTITLE)),
+                        (volumeInfoJSON.isNull(SUBTITLE) ? " " : volumeInfoJSON.getString(SUBTITLE)),
                         authors,
-                        volumeInfoJSON.getString(PUBLISHED_DATE),
+                        volumeInfoJSON.getString(PUBLISHER),
                         volumeInfoJSON.getString(PUBLISHED_DATE));
 
                 // ADD THE NW BOOK TO THE BOOKS
